@@ -1,6 +1,6 @@
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
 
-export const getPosts = async (req: Request, res: Response, next: NextFunction) => {
+export const getPosts = async (_: Request, res: Response) => {
   try {
     res.status(200).json({
       message: 'get posts',
