@@ -1,0 +1,5 @@
+*.test*
+migrations
+dist
+build 
+node_modules

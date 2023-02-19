@@ -1,0 +1,10 @@
+/node_modules
+/build
+.env*
+/coverage
+*.log
+*.http
+.idea/
+/APIsCollection
+.DS_Store
+/logs/
