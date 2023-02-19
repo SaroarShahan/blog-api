@@ -7,8 +7,7 @@
     "checkJs": false,
     "skipLibCheck": true,
     "sourceMap": true,
-    "outDir": "./build",
-    "rootDir": "./src",
+    "outDir": "build",
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -16,16 +15,19 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "moduleResolution": "node",
-    "baseUrl": "./",
+    "baseUrl": "./src",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "forceConsistentCasingInFileNames": true,
     "paths": {
-      "~/*": ["./src/*"]
+      "~/*": ["./*"]
     }
   },
-  "include": ["**/*"],
-  "exclude": ["node_modules"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"],
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
+  }
 }
