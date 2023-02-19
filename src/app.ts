@@ -1,8 +1,16 @@
 import express from 'express';
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
+
+import postRoutes from '~/routes/postRoutes';
 
 const _PORT = process.env.PORT || 4000;
 const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use('/api/v1/posts', postRoutes);
 
 app.listen(_PORT, () => {
   console.log(`Server is running on port ${_PORT}`);
