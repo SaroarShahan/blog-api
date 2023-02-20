@@ -3,6 +3,9 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import postRoutes from '~/routes/postRoutes';
+import dbConnect from '~/config/dbConeect';
+
+dbConnect();
 
 const _PORT = process.env.PORT || 4000;
 const app = express();
