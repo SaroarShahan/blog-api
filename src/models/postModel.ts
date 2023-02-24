@@ -10,6 +10,14 @@ const postSchema = new Schema(
       type: String,
       required: [true, 'Description is required'],
     },
+    author: {
+      type: Object,
+      required: true,
+    },
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
   },
   {
     timestamps: true,
