@@ -1,32 +1,33 @@
 import { Request, Response } from 'express';
 
 import Post from '~/models/postModel';
+import asyncHandler from '~/utils/asynHandler';
 
 /**
  * @description Get all of the posts
  * @route GET /api/v1/contacts
  * @access public
  */
-export const getPosts = async (_: Request, res: Response) => {
-  try {
-    const posts = await Post.find();
+export const getPosts = asyncHandler(async (_: Request, res: Response) => {
+  // try {
+  const posts = await Post.find();
 
-    res.status(200).json({
-      status: 'success',
-      data: {
-        posts,
-        meta: {
-          counts: posts.length,
-        },
+  res.status(200).json({
+    status: 'success',
+    data: {
+      posts,
+      meta: {
+        counts: posts.length,
       },
-    });
-  } catch (error) {
-    res.status(400).json({
-      status: 'fail',
-      message: error,
-    });
-  }
-};
+    },
+  });
+  // } catch (error) {
+  //   res.status(400).json({
+  //     status: 'fail',
+  //     message: error,
+  //   });
+  // }
+});
 
 /**
  * @description Get post
@@ -54,11 +55,12 @@ export const getPost = async (req: Request, res: Response) => {
 /**
  * @description Create post
  * @route POST /api/v1/contacts
- * @access public
+ * @access private
  */
-export const createPost = async (req: Request, res: Response) => {
+export const createPost = async (req: any, res: Response) => {
   try {
     const { title, description } = req.body;
+    const { user } = req.user;
 
     if (!title || !description) {
       return res.status(400).json({
@@ -70,6 +72,8 @@ export const createPost = async (req: Request, res: Response) => {
     const newPost = await Post.create({
       title,
       description,
+      author: user,
+      userId: req.user.id,
     });
 
     res.status(201).json({
@@ -90,9 +94,9 @@ export const createPost = async (req: Request, res: Response) => {
 /**
  * @description Update post
  * @route GET /api/v1/contacts/:id
- * @access public
+ * @access private
  */
-export const updatePost = async (req: Request, res: Response) => {
+export const updatePost = async (req: any, res: Response) => {
   try {
     const { id } = req.params;
 
@@ -102,6 +106,14 @@ export const updatePost = async (req: Request, res: Response) => {
       return res.status(404).json({
         status: 'fail',
         messag: 'Post not found',
+        data: null,
+      });
+    }
+
+    if (post.userId?._id.toString() !== req.user.id) {
+      return res.status(401).json({
+        status: 'fail',
+        messag: "You don't have permission to update this post",
         data: null,
       });
     }
@@ -129,11 +141,31 @@ export const updatePost = async (req: Request, res: Response) => {
 /**
  * @description Delete post
  * @route GET /api/v1/contacts/:id
- * @access public
+ * @access private
  */
-export const deletePost = async (req: Request, res: Response) => {
+export const deletePost = async (req: any, res: Response) => {
   try {
-    await Post.findByIdAndDelete(req.params.id);
+    const { id } = req.params;
+
+    const post = await Post.findById({ _id: id });
+
+    if (!post) {
+      return res.status(404).json({
+        status: 'fail',
+        messag: 'Post not found',
+        data: null,
+      });
+    }
+
+    if (post.userId?._id.toString() !== req.user.id) {
+      return res.status(401).json({
+        status: 'fail',
+        messag: "You don't have permission to update this post",
+        data: null,
+      });
+    }
+
+    await Post.findByIdAndDelete(id);
 
     res.status(200).json({
       status: 'success',
