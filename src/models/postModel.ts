@@ -10,6 +10,9 @@ const postSchema = new Schema(
       type: String,
       required: [true, 'Description is required'],
     },
+    coverPhoto: {
+      type: String,
+    },
     author: {
       type: Object,
       required: true,

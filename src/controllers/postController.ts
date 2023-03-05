@@ -44,8 +44,8 @@ export const getPost = asyncHandler(async (req: Request, res: Response) => {
  * @access private
  */
 export const createPost = asyncHandler(async (req: any, res: Response) => {
-  const { title, description } = req.body;
-  const { user } = req.user;
+  const { title, description, coverPhoto } = req.body;
+  const { user } = req;
 
   if (!title || !description) {
     return res.status(400).json({
@@ -57,6 +57,7 @@ export const createPost = asyncHandler(async (req: any, res: Response) => {
   const newPost = await Post.create({
     title,
     description,
+    coverPhoto,
     author: user,
     userId: req.user.id,
   });
