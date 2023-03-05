@@ -1,5 +1,5 @@
 import { NextFunction, Response } from 'express';
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 
 const verifyToken = async (req: any, res: Response, next: NextFunction) => {
   const authHeader = req.headers.Authorization || req.headers.authorization;
@@ -19,8 +19,9 @@ const verifyToken = async (req: any, res: Response, next: NextFunction) => {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.SECRET!);
-    req.user = decoded;
+    const decoded = jwt.verify(token, process.env.SECRET!) as JwtPayload;
+
+    req.user = decoded.user;
 
     next();
   } catch (err) {
