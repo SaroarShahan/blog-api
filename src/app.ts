@@ -18,5 +18,5 @@ app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/posts', postRoutes);
 
 app.listen(_PORT, () => {
-  console.log(`Server is running on port ${_PORT}`);
+  console.log(`Server is running on port ${_PORT} http://localhost:${_PORT}`);
 });
